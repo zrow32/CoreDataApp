@@ -74,14 +74,24 @@ extension TaskListViewController {
         
         let task = tasks[indexPath.row]
         cell.textLabel?.text = task.name
-      //  cell.accessoryType = task.completed ? .checkmark : .none
+        // checkmark  не работает
+   //   cell.accessoryType = task.completed ? .checkmark : .none
+        
         
         return cell
     }
     
     // MARK: -  TableView Delegate methods
-    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+         tasks[indexPath.row].setValue("Done", forKey: "name")
+        
+        do {
+            try viewContext.save()
+        } catch {}
+        // checkmark  не работает
+    //    tasks[indexPath.row].done = !tasks[indexPath.row].done
+ 
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
@@ -90,7 +100,6 @@ extension TaskListViewController {
     }
     
     //MARK: -  Deleting tasks
-    
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             let task = tasks[indexPath.row]
@@ -117,7 +126,6 @@ extension TaskListViewController {
                 print("The text field is empty")
                 return
             }
-            
             self.save(task)
         }
         
